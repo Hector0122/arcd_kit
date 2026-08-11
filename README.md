@@ -94,12 +94,15 @@ Para feedback de tap (botones, cards), usa `motion.spring.press` con
 
 ## Colores por app
 
-Regla: **un solo hex por nombre de color en todo el sistema.** Antes cada
-app inventaba su propio "amarillo" o "morado" y terminábamos con 3
-amarillos (`#F5A623`, `#D9A441`, `#EAB308`) y 2 morados (`#7B6BF5`,
-`#7C5CFF`) casi idénticos entre sí — puro ruido, ninguna diferencia
-intencional. Ahora cada app solo referencia `hues.<nombre>` en
-`tokens.ts`; no se puede colar un casi-duplicado nuevo.
+Regla: **un solo hex por nombre de color en todo el sistema, sin
+excepciones.** Antes cada app inventaba su propio "amarillo" o "morado" y
+terminábamos con 3 amarillos (`#F5A623`, `#D9A441`, `#EAB308`) y 2 morados
+(`#7B6BF5`, `#7C5CFF`) casi idénticos entre sí — puro ruido, ninguna
+diferencia intencional. Ahora cada app solo referencia `hues.<nombre>` en
+`tokens.ts`; no se puede colar un casi-duplicado nuevo. Cuando el color de
+marca de una app coincide con un semántico (verde de Varo = success, rojo
+de VaultGaming = danger), `hues` referencia directamente ese valor de
+`semantic` — no lo redefine — para que sea imposible que diverjan.
 
 | App | Dominio | Primary | Accent | Estado |
 |---|---|---|---|---|
@@ -107,15 +110,16 @@ intencional. Ahora cada app solo referencia `hues.<nombre>` en
 | Veya | pelis/series/anime | `#7B6BF5` morado | `#2BD4CE` teal | **antes tenía su propio morado/teal ligeramente distintos — ahora es literalmente el mismo dúo que Vaulta, en espejo** |
 | Vellum | lector con streaks | `#4A7DB8` azul apagado | `#F5A623` ámbar | accent antes era un dorado propio (`#D9A441`) → ahora el ámbar único del sistema |
 | Velody | descarga de música | `#F97316` naranja | `#F5A623` ámbar | accent antes era su propio ámbar (`#EAB308`) → unificado |
-| **VaultGaming** | backlog/deals de juegos | `#EF4360` frambuesa | `#F5A623` ámbar | primary **nuevo** (antes gris/verde default de Tailwind, sin decisión de marca) |
-| **Varo** | metas de ahorro | `#2FBF71` verde | `#4C8DFF` azul | primary **nuevo** (antes el verde era solo semántico "success", sin marca propia) |
+| **VaultGaming** | backlog/deals de juegos | `#E5484D` rojo | `#F5A623` ámbar | primary **nuevo** — antes gris/verde default de Tailwind; ahora es literalmente `semantic.danger`, mismo caso que el verde de Varo |
+| **Varo** | metas de ahorro | `#2FBF71` verde | `#4C8DFF` azul | primary **nuevo** — literalmente `semantic.success`, antes no había marca propia |
 
-**Sobre el rojo:** `VaultGaming` usa frambuesa (`#EF4360`), no el mismo
-rojo que `semantic.danger` (`#E5484D`). Es la única excepción a "un color,
-un hex" — a propósito: si el color de marca de una app fuera idéntico al
-rojo de "error", cualquier botón de eliminar en cualquier app se leería
-como si fuera de la marca de VaultGaming. Si prefieres que sí sean
-exactamente el mismo rojo, es un solo valor que cambiar en `hues.raspberry`.
+**Sobre el rojo de VaultGaming:** al ser el mismo valor que
+`semantic.danger`, cualquier estado de error o botón destructivo en
+*cualquiera* de las 6 apps se ve del mismo rojo que el color de marca de
+VaultGaming. Es la consecuencia esperada de "un color, un hex sin
+excepciones" — queda documentado por si en el futuro se vuelve confuso
+dentro de VaultGaming mismo (¿este rojo es "marca" o es "error"?) y hay
+que revisarlo.
 
 ## Cómo migrar una app (ej. Varo, la más simple hoy)
 

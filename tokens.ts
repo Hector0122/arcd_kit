@@ -44,24 +44,24 @@ export const semantic = {
 } as const;
 
 // ---------------------------------------------------------------------------
-// Paleta de marca — UN solo hex por nombre de color en TODO el sistema.
-// Antes cada app inventaba su propio tono de "amarillo" o "morado" y
-// terminábamos con 3 amarillos y 2 morados casi idénticos. Ahora cada
-// app referencia estos nombres — no vuelve a pasar.
+// Paleta de marca — UN solo hex por nombre de color en TODO el sistema,
+// sin excepciones. Antes cada app inventaba su propio tono de "amarillo"
+// o "morado" y terminábamos con 3 amarillos y 2 morados casi idénticos.
+// Ahora cada app referencia estos nombres — no vuelve a pasar.
 //
-// `red` queda reservado para `semantic.danger` y no se usa como marca de
-// ninguna app: si un color de marca fuera literalmente el mismo rojo que
-// "error", cualquier botón de eliminar en cualquier app se confundiría
-// visualmente con el color de marca de esa app.
+// Cuando un color de marca coincide con un semántico (verde de Varo =
+// success, rojo de VaultGaming = danger) NO se redefine el hex: se
+// referencia el mismo valor de `semantic`, para que sea imposible que
+// diverjan con el tiempo.
 // ---------------------------------------------------------------------------
 export const hues = {
-  green: '#2FBF71', // Varo — coincide con semantic.success a propósito (ahorro = progreso)
-  azure: '#4C8DFF', // Varo (acento) — coincide con semantic.info a propósito
+  green: semantic.success.light, // Varo — ahorro = progreso, mismo verde que success
+  azure: semantic.info.light, // Varo (acento) — mismo azul que info
   slateBlue: '#4A7DB8', // Vellum — azul apagado de "papel", distinto de azure a propósito
   teal: '#2BD4CE', // Vaulta / Veya
   purple: '#7B6BF5', // Vaulta / Veya
-  amber: { light: '#F5A623', dark: '#FFC24B' }, // VaultGaming / Vellum / Velody — coincide con semantic.warning
-  raspberry: '#EF4360', // VaultGaming — deliberadamente NO es semantic.danger, ver nota arriba
+  amber: semantic.warning.light, // VaultGaming / Vellum / Velody — mismo ámbar que warning
+  red: semantic.danger.light, // VaultGaming — mismo rojo que danger, sin excepción
   orange: '#F97316', // Velody
 } as const;
 
@@ -232,9 +232,9 @@ export type ThemeColors = AppTheme['light'];
 // ---------------------------------------------------------------------------
 export const brands = {
   varo: { primary: hues.green, accent: hues.azure }, // finanzas
-  vaultgaming: { primary: hues.raspberry, accent: hues.amber.light }, // backlog de juegos / ofertas
+  vaultgaming: { primary: hues.red, accent: hues.amber }, // backlog de juegos / ofertas — antes crimson propio (#EF4360), ahora el mismo rojo que danger
   vaulta: { primary: hues.teal, accent: hues.purple }, // fotos
-  vellum: { primary: hues.slateBlue, accent: hues.amber.light }, // lector — antes usaba un dorado propio (#D9A441)
+  vellum: { primary: hues.slateBlue, accent: hues.amber }, // lector — antes usaba un dorado propio (#D9A441)
   veya: { primary: hues.purple, accent: hues.teal }, // pelis/series/anime — antes usaba su propio morado/teal
-  velody: { primary: hues.orange, accent: hues.amber.light }, // música — antes usaba su propio ámbar (#EAB308)
+  velody: { primary: hues.orange, accent: hues.amber }, // música — antes usaba su propio ámbar (#EAB308)
 } as const satisfies Record<string, BrandAccent>;
