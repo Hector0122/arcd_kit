@@ -44,6 +44,28 @@ export const semantic = {
 } as const;
 
 // ---------------------------------------------------------------------------
+// Paleta de marca — UN solo hex por nombre de color en TODO el sistema.
+// Antes cada app inventaba su propio tono de "amarillo" o "morado" y
+// terminábamos con 3 amarillos y 2 morados casi idénticos. Ahora cada
+// app referencia estos nombres — no vuelve a pasar.
+//
+// `red` queda reservado para `semantic.danger` y no se usa como marca de
+// ninguna app: si un color de marca fuera literalmente el mismo rojo que
+// "error", cualquier botón de eliminar en cualquier app se confundiría
+// visualmente con el color de marca de esa app.
+// ---------------------------------------------------------------------------
+export const hues = {
+  green: '#2FBF71', // Varo — coincide con semantic.success a propósito (ahorro = progreso)
+  azure: '#4C8DFF', // Varo (acento) — coincide con semantic.info a propósito
+  slateBlue: '#4A7DB8', // Vellum — azul apagado de "papel", distinto de azure a propósito
+  teal: '#2BD4CE', // Vaulta / Veya
+  purple: '#7B6BF5', // Vaulta / Veya
+  amber: { light: '#F5A623', dark: '#FFC24B' }, // VaultGaming / Vellum / Velody — coincide con semantic.warning
+  raspberry: '#EF4360', // VaultGaming — deliberadamente NO es semantic.danger, ver nota arriba
+  orange: '#F97316', // Velody
+} as const;
+
+// ---------------------------------------------------------------------------
 // Spacing — grid de 4pt
 // ---------------------------------------------------------------------------
 export const spacing = {
@@ -205,13 +227,14 @@ export type ThemeColors = AppTheme['light'];
 
 // ---------------------------------------------------------------------------
 // Colores de marca por app — la única diferencia real entre productos.
-// Hue repartido a propósito para que ninguna se confunda con otra.
+// Cada valor viene de `hues`, nunca un hex suelto — así no se puede
+// colar un "casi-amarillo" o "casi-morado" nuevo por accidente.
 // ---------------------------------------------------------------------------
 export const brands = {
-  varo: { primary: '#2FBF71', accent: '#4C8DFF' }, // finanzas — verde progreso + azul secundario
-  vaultgaming: { primary: '#EF4360', accent: '#F5A623' }, // backlog de juegos — crimson + ámbar (ofertas)
-  vaulta: { primary: '#2BD4CE', accent: '#7B6BF5' }, // fotos — teal + morado (sin cambios, ya funciona)
-  vellum: { primary: '#4A7DB8', accent: '#D9A441' }, // lector — azul apagado + dorado (sin cambios)
-  veya: { primary: '#7C5CFF', accent: '#21D4B4' }, // pelis/series — morado + teal (sin cambios)
-  velody: { primary: '#F97316', accent: '#EAB308' }, // música — naranja + ámbar
+  varo: { primary: hues.green, accent: hues.azure }, // finanzas
+  vaultgaming: { primary: hues.raspberry, accent: hues.amber.light }, // backlog de juegos / ofertas
+  vaulta: { primary: hues.teal, accent: hues.purple }, // fotos
+  vellum: { primary: hues.slateBlue, accent: hues.amber.light }, // lector — antes usaba un dorado propio (#D9A441)
+  veya: { primary: hues.purple, accent: hues.teal }, // pelis/series/anime — antes usaba su propio morado/teal
+  velody: { primary: hues.orange, accent: hues.amber.light }, // música — antes usaba su propio ámbar (#EAB308)
 } as const satisfies Record<string, BrandAccent>;

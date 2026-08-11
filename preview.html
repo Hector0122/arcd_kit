@@ -336,6 +336,30 @@
     .track .fill { transition: none !important; }
   }
 
+  /* ---- canonical hue strip ---- */
+  .hue-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .hue-chip {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 5px 12px 5px 6px;
+    background: var(--paper-raised);
+  }
+  .hue-chip .dot { width: 16px; height: 16px; }
+  .hue-chip .label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 11px;
+    color: var(--ink-soft);
+  }
+  .hue-chip .hex { color: var(--ink-faint); }
+
   /* ---- brand cards ---- */
   .brand-grid {
     display: grid;
@@ -527,7 +551,8 @@
   <section class="fig" id="brands">
     <div class="fig-label">Fig. 05 — Paleta por app</div>
     <h2>Misma estructura, color de marca propio</h2>
-    <p class="fig-note">Vaulta, Veya, Vellum y Velody conservan el color que ya tenían — ya funcionaba. Varo y VaultGaming son nuevos: hoy no tienen un color de marca real, solo semánticos o el gris por defecto de Tailwind.</p>
+    <p class="fig-note">Un solo hex por nombre de color en todo el sistema — antes había 3 amarillos y 2 morados casi idénticos entre apps. Ahora cada app referencia el mismo <code>teal</code>, <code>purple</code> o <code>amber</code>; Vaulta y Veya incluso comparten el mismo dúo en espejo. Varo y VaultGaming son los únicos con color de marca nuevo — antes no tenían ninguno.</p>
+    <div class="hue-strip" id="hueStrip"></div>
     <div class="brand-grid" id="brandGrid"></div>
   </section>
 
@@ -622,10 +647,24 @@
     { name: "Varo", domain: "Metas de ahorro", primary: "#2FBF71", accent: "#4C8DFF", dark: true, badge: "NUEVO" },
     { name: "VaultGaming", domain: "Backlog / ofertas de juegos", primary: "#EF4360", accent: "#F5A623", dark: true, badge: "NUEVO" },
     { name: "Vaulta", domain: "Fotos privadas", primary: "#2BD4CE", accent: "#7B6BF5", dark: true, badge: "" },
-    { name: "Vellum", domain: "Lector con streaks", primary: "#4A7DB8", accent: "#D9A441", dark: false, badge: "" },
-    { name: "Veya", domain: "Pelis, series, anime", primary: "#7C5CFF", accent: "#21D4B4", dark: true, badge: "" },
-    { name: "Velody", domain: "Descarga de música", primary: "#F97316", accent: "#EAB308", dark: true, badge: "" }
+    { name: "Vellum", domain: "Lector con streaks", primary: "#4A7DB8", accent: "#F5A623", dark: false, badge: "AJUSTADO" },
+    { name: "Veya", domain: "Pelis, series, anime", primary: "#7B6BF5", accent: "#2BD4CE", dark: true, badge: "AJUSTADO" },
+    { name: "Velody", domain: "Descarga de música", primary: "#F97316", accent: "#F5A623", dark: true, badge: "AJUSTADO" }
   ];
+  var hues = [
+    ["green", "#2FBF71"], ["azure", "#4C8DFF"], ["slate blue", "#4A7DB8"],
+    ["teal", "#2BD4CE"], ["purple", "#7B6BF5"], ["amber", "#F5A623"],
+    ["raspberry", "#EF4360"], ["orange", "#F97316"]
+  ];
+  var hueStrip = document.getElementById("hueStrip");
+  hues.forEach(function (h) {
+    var chip = document.createElement("div");
+    chip.className = "hue-chip";
+    chip.innerHTML = '<i class="dot" style="background:' + h[1] + ';border-radius:50%;display:inline-block"></i>' +
+      '<span class="label">' + h[0] + ' <span class="hex">' + h[1] + '</span></span>';
+    hueStrip.appendChild(chip);
+  });
+
   var bgrid = document.getElementById("brandGrid");
   brands.forEach(function (b) {
     var bg = b.dark ? "#101214" : "#FFFFFF";
