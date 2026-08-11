@@ -29,6 +29,7 @@ Lo único que varía por app es `primary`/`accent` (ver tabla abajo).
 | Tipografía (familias y escala) | ✅ `type`, `fontFamily` | |
 | Color primario / acento | | ✅ `brands.<app>` |
 | Semánticos (success/danger/warning) | ✅ `semantic` | |
+| Iconos (librería + set) | ✅ `react-native-vector-icons/MaterialCommunityIcons` | |
 
 ## Tipografía
 
@@ -46,6 +47,70 @@ Lo único que varía por app es `primary`/`accent` (ver tabla abajo).
 Esto extiende el mismo patrón que ya usas en el portfolio web
 (Archivo Black + IBM Plex Mono + sans del sistema para el body), así que
 portfolio y apps de producto van a sentirse de la misma marca.
+
+## Iconos
+
+Estado actual (auditado 2026-08-11): **3 fuentes distintas de icono en 5
+apps**, ninguna decidida a propósito.
+
+| App | Cómo renderiza iconos hoy |
+|---|---|
+| Varo | emoji sueltos (`💰` `📈` `📉`) |
+| Veya | emoji sueltos (`🏠` `🔍` `📚` `👤`) |
+| VaultGaming | emoji sueltos (`🔍` `🎮` `📦`) |
+| Vaulta | `react-native-vector-icons/MaterialIcons` |
+| Vellum | `react-native-vector-icons/MaterialCommunityIcons` |
+
+Dos problemas reales, no solo estético:
+
+1. **El emoji no se tiñe.** Varo/Veya/VaultGaming le pasan `color` al
+   `<Text>` que envuelve el emoji esperando que el tab activo se pinte del
+   color de marca — pero un emoji es un glifo a color fijo del sistema
+   operativo, `color` no lo afecta. El highlight de "tab activo" hoy
+   probablemente no se ve como se pretende en esas 3 apps.
+2. Vaulta y Vellum ya usan una librería de iconos vectorial — pero **dos
+   sets distintos** (`MaterialIcons` vs `MaterialCommunityIcons`), con
+   nombres de icono y cobertura diferentes entre sí.
+
+**Estándar elegido:** `react-native-vector-icons` (v10.3.0, la misma
+versión que ya usan Vaulta/Vellum — no la migración al modelo nuevo de
+paquetes por familia, eso es una decisión aparte) con el set
+**`MaterialCommunityIcons`** en las 6 apps: es el más grande (~7,000
+iconos) y el que mejor cubre dominios tan distintos como finanzas,
+gaming, fotos, lectura, streaming y música con un solo set. Los iconos
+vectoriales sí se tiñen con `primary`/`text`/`textMuted` del theme, así
+que el highlight de estado activo por fin funciona de verdad.
+
+Migración por app:
+- **Vellum** — ya usa el set correcto, no requiere cambio.
+- **Vaulta** — cambiar el import de `MaterialIcons` a
+  `MaterialCommunityIcons` y revisar que los nombres de icono usados
+  existan en el nuevo set (algunos difieren).
+- **Varo, Veya, VaultGaming** — instalar `react-native-vector-icons` +
+  `@types/react-native-vector-icons`, enlazar las fuentes nativas (ver
+  abajo) y reemplazar cada emoji por su icono MDI equivalente.
+
+### Enlazar la fuente nativa (una vez por app)
+
+```bash
+pnpm add react-native-vector-icons
+pnpm add -D @types/react-native-vector-icons
+```
+
+- **Android** — agregar al final de `android/app/build.gradle`:
+  ```gradle
+  apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
+  ```
+- **iOS** — agregar a `Info.plist` dentro de `UIAppFonts`:
+  ```xml
+  <key>UIAppFonts</key>
+  <array>
+    <string>MaterialCommunityIcons.ttf</string>
+  </array>
+  ```
+  y correr `bundle exec pod install` en `ios/`.
+- Recompilar (`npm run android` / `npm run ios`) — Metro/Fast Refresh no
+  recoge fuentes nativas nuevas.
 
 ### Integrar las fuentes en cada app RN
 
