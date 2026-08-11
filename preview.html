@@ -550,6 +550,8 @@
   }
   .checklist b { font-weight: 700; }
   .checklist .why { display: block; color: var(--ink-soft); font-size: 13px; margin-top: 2px; }
+  .checklist li.done { opacity: 0.55; }
+  .checklist li.done .n { color: var(--mark); }
 
   footer.colophon {
     margin-top: 56px;
@@ -701,8 +703,8 @@
     <div class="fig-label">Fig. 08 — Próximos pasos</div>
     <h2>Cómo migramos, en orden</h2>
     <ul class="checklist">
-      <li><span class="n">01</span><div><b>Varo</b><span class="why">Mayor impacto: hoy no tiene color de marca propio, solo verde/rojo/amarillo de estado.</span></div></li>
-      <li><span class="n">02</span><div><b>VaultGaming</b><span class="why">Usa grises + verde de Tailwind sin decisión de diseño — el otro caso urgente.</span></div></li>
+      <li class="done"><span class="n">01 ✓</span><div><b>Varo</b><span class="why">Mayor impacto: no tenía color de marca propio, solo verde/rojo/amarillo de estado. Migrado.</span></div></li>
+      <li class="done"><span class="n">02 ✓</span><div><b>VaultGaming</b><span class="why">Usaba grises + verde de Tailwind sin decisión de diseño — el otro caso urgente. Migrado.</span></div></li>
       <li><span class="n">03</span><div><b>Vaulta, Veya, Vellum, Velody</b><span class="why">Ya tienen identidad propia — solo ganan estructura, tipografía y motion compartidos.</span></div></li>
       <li><span class="n">04</span><div><b>Portfolio</b><span class="why">Actualizar las tarjetas de proyecto si algún acento cambia.</span></div></li>
     </ul>
