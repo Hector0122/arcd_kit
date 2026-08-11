@@ -30,6 +30,7 @@ Lo único que varía por app es `primary`/`accent` (ver tabla abajo).
 | Color primario / acento | | ✅ `brands.<app>` |
 | Semánticos (success/danger/warning) | ✅ `semantic` | |
 | Iconos (librería + set) | ✅ `react-native-vector-icons/MaterialCommunityIcons` | |
+| Botones (forma, radio, curva) | ✅ componente `Button` compartido | color de relleno (`primary`/`danger`) |
 
 ## Tipografía
 
@@ -156,6 +157,51 @@ const style = useAnimatedStyle(() => ({
 
 Para feedback de tap (botones, cards), usa `motion.spring.press` con
 `withSpring`.
+
+## Botones
+
+Estado actual (auditado 2026-08-11 en Varo): **cada botón usaba el
+`Button` nativo de React Native**, que no acepta `borderRadius`, `padding`
+ni casi ningún estilo — y encima se renderiza distinto por plataforma
+(en Android es un rectángulo relleno Material, en iOS es solo texto azul
+sin relleno). Resultado real en el código: media docena de radios sueltos
+a mano en el resto de la UI (`3`, `4`, `5`, `6`, `8`, `10`, `12`, `16`,
+`20`, `22`, `28`...) sin ningún criterio — "muchos tipos de redondeado"
+porque nunca hubo un solo componente de botón que forzara un valor.
+
+**Estándar elegido:** un componente `Button` propio (`src/components/
+Button.tsx`, copiar a cada app) que envuelve `Pressable` y fija:
+
+- **Radio:** `radius.sm` (10) del `tokens.ts` compartido — ligero, no
+  pill. Mismo valor en las 6 apps.
+- **Curva de esquina:** `borderCurve: 'continuous'` — la esquina
+  "superelipse" que usan los controles de iOS (no el arco circular por
+  defecto de Android/CSS). Es un `no-op` en Android, así que ahí cae de
+  vuelta al arco normal sin romper nada. Referencia deliberada al
+  lenguaje visual de Apple, que es el que le gustó al ojo del equipo.
+- **Variantes** (reemplazan al viejo `color={colors.x}` del `Button`
+  nativo): `primary` (relleno `colors.green`/`primary` de la app, texto
+  blanco — default), `danger` (relleno `colors.red`, para
+  destructivo/cerrar sesión), `ghost` (sin relleno, texto
+  `textSecondary`, para "Cancelar").
+- **Feedback de tap:** `opacity` reducida en `pressed` (ver `## Motion` —
+  candidato a pasar a `motion.spring.press` con Reanimated más adelante,
+  hoy es un `opacity` simple para no añadir una dependencia solo por
+  esto).
+
+Migración: copia `Button.tsx` (raíz de este repo) a `src/components/` de
+cada app y reemplaza cada `<Button title=... onPress=... />` /
+`color={...}` de `react-native` por `<Button title=... onPress=...
+variant=... loading=... />`. El componente lee `colors.primary` /
+`colors.danger` / `colors.textSecondary` — los nombres canónicos de
+`AppThemeColors` en `tokens.ts`. Si tu `colors.ts` todavía no expone esos
+nombres (como Varo, que por ahora conserva `green`/`red` para no tocar
+sus ~24 archivos consumidores — ver `## Cómo migrar una app`), ajusta esas
+tres líneas del `Button.tsx` copiado a los nombres que sí tengas.
+
+Ya migrado en Varo (7 usos: Login, Register, Profile ×3, Goals,
+Categories, Transactions, TransactionForm) — usando `colors.green` /
+`colors.red` / `colors.textSecondary`.
 
 ## Colores por app
 

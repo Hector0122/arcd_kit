@@ -392,6 +392,74 @@
     color: var(--ink-soft);
   }
 
+  /* ---- buttons ---- */
+  .button-compare {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+  }
+  .button-compare .group {
+    flex: 1;
+    min-width: 220px;
+  }
+  .group-label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 12px;
+  }
+  .button-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .btn-native-android,
+  .btn-native-ios,
+  .btn-new {
+    font-size: 14px;
+    text-align: center;
+    padding: 11px 18px;
+  }
+  .btn-native-android {
+    background: #6b7a99;
+    color: #fff;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    border-radius: 0;
+  }
+  .btn-native-ios {
+    background: transparent;
+    color: #3478f6;
+    font-weight: 500;
+    padding-left: 0;
+    padding-right: 0;
+    text-align: left;
+  }
+  .platform-tag {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 9.5px;
+    color: var(--ink-faint);
+    margin-bottom: 4px;
+    display: block;
+  }
+  .btn-new {
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .btn-new.primary { background: var(--mark); color: #fff; }
+  .btn-new.danger { background: #e5484d; color: #fff; }
+  .btn-new.ghost { background: transparent; color: var(--ink-soft); text-align: left; padding-left: 0; }
+  .button-note {
+    margin-top: 4px;
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 9.5px;
+    color: var(--ink-faint);
+  }
+
   /* ---- brand cards ---- */
   .brand-grid {
     display: grid;
@@ -571,25 +639,57 @@
     <div class="radius-row" id="radiusRow"></div>
   </section>
 
-  <!-- FIG 04 — MOTION -->
+  <!-- FIG 04 — BUTTONS -->
+  <section class="fig" id="buttons">
+    <div class="fig-label">Fig. 04 — Botones</div>
+    <h2>Un solo componente, un solo radio</h2>
+    <p class="fig-note">El <code>Button</code> nativo de React Native no acepta <code>borderRadius</code> — y se ve distinto por plataforma (Android: rectángulo relleno sin esquina; iOS: solo texto azul, sin relleno). Sin un componente propio, cada pantalla terminaba improvisando su propio radio en el resto de la UI: <code>3, 4, 5, 6, 8, 10, 12, 16, 20, 22, 28</code> — once valores distintos en un solo repo. El nuevo <code>Button</code> fija <code>radius.sm</code> (10) y una esquina "continua" (superelipse), tomando como referencia el lenguaje visual de los controles de iOS.</p>
+    <div class="button-compare">
+      <div class="group">
+        <div class="group-label">Antes — Button nativo</div>
+        <div class="button-stack">
+          <div>
+            <span class="platform-tag">Android</span>
+            <div class="btn-native-android">CERRAR SESIÓN</div>
+          </div>
+          <div>
+            <span class="platform-tag">iOS</span>
+            <div class="btn-native-ios">Cerrar sesión</div>
+          </div>
+        </div>
+        <div class="button-note">sin radio · distinto por plataforma</div>
+      </div>
+      <div class="group">
+        <div class="group-label">Ahora — Button compartido</div>
+        <div class="button-stack">
+          <div class="btn-new primary">Iniciar sesión</div>
+          <div class="btn-new danger">Cerrar sesión</div>
+          <div class="btn-new ghost">Cancelar</div>
+        </div>
+        <div class="button-note">radius.sm (10) · borderCurve: continuous · variant primary/danger/ghost</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FIG 05 — MOTION -->
   <section class="fig" id="motion">
-    <div class="fig-label">Fig. 04 — Motion</div>
+    <div class="fig-label">Fig. 05 — Motion</div>
     <h2>El token que más se nota cuando falta</h2>
     <p class="fig-note">Prueba cada duración — es la diferencia entre una transición que se siente "de la casa" y una que se siente improvisada pantalla por pantalla.</p>
     <div class="motion-grid" id="motionGrid"></div>
   </section>
 
-  <!-- FIG 05 — ICONS -->
+  <!-- FIG 06 — ICONS -->
   <section class="fig" id="icons">
-    <div class="fig-label">Fig. 05 — Iconos</div>
+    <div class="fig-label">Fig. 06 — Iconos</div>
     <h2>Emoji sin teñir → MaterialCommunityIcons</h2>
     <p class="fig-note">Auditoría: Varo, Veya y VaultGaming usaban emoji sueltos como iconos de tab/header — un emoji es un glifo a color fijo del sistema, no obedece <code>color</code>, así que el "tab activo" probablemente no se pintaba del color de marca. Vaulta y Vellum ya usaban una librería vectorial, pero cada una con un set distinto. Estos son los iconos reales que ya migré en Varo — el mismo SVG que renderiza <code>react-native-vector-icons/MaterialCommunityIcons</code>, con <code>fill="currentColor"</code> para que sí se tiña.</p>
     <div class="icon-compare" id="iconCompare"></div>
   </section>
 
-  <!-- FIG 06 — BRAND PALETTES -->
+  <!-- FIG 07 — BRAND PALETTES -->
   <section class="fig" id="brands">
-    <div class="fig-label">Fig. 06 — Paleta por app</div>
+    <div class="fig-label">Fig. 07 — Paleta por app</div>
     <h2>Misma estructura, color de marca propio</h2>
     <p class="fig-note">Un solo hex por nombre de color en todo el sistema — antes había 3 amarillos y 2 morados casi idénticos entre apps. Ahora cada app referencia el mismo <code>teal</code>, <code>purple</code> o <code>amber</code>; Vaulta y Veya incluso comparten el mismo dúo en espejo. Varo y VaultGaming son los únicos con color de marca nuevo — antes no tenían ninguno.</p>
     <div class="hue-strip" id="hueStrip"></div>
@@ -598,7 +698,7 @@
 
   <!-- CHECKLIST -->
   <section class="fig" id="next">
-    <div class="fig-label">Fig. 07 — Próximos pasos</div>
+    <div class="fig-label">Fig. 08 — Próximos pasos</div>
     <h2>Cómo migramos, en orden</h2>
     <ul class="checklist">
       <li><span class="n">01</span><div><b>Varo</b><span class="why">Mayor impacto: hoy no tiene color de marca propio, solo verde/rojo/amarillo de estado.</span></div></li>
