@@ -84,13 +84,44 @@ que el highlight de estado activo por fin funciona de verdad.
 
 Migración por app:
 - **Vellum** — ya usa el set correcto, no requiere cambio.
-- **Vaulta** — cambiar el import de `MaterialIcons` a
-  `MaterialCommunityIcons` y revisar que los nombres de icono usados
-  existan en el nuevo set (algunos difieren).
-- **Varo** ✅ y **VaultGaming** ✅ — migrados. **Veya** — pendiente:
-  instalar `react-native-vector-icons` + `@types/react-native-vector-icons`,
-  enlazar las fuentes nativas (ver abajo) y reemplazar cada emoji por su
-  icono MDI equivalente.
+- **Varo** ✅, **VaultGaming** ✅ y **Vaulta** ✅ — migrados.
+- **Veya** — pendiente: instalar `react-native-vector-icons` +
+  `@types/react-native-vector-icons`, enlazar las fuentes nativas (ver
+  abajo) y reemplazar cada emoji por su icono MDI equivalente.
+
+**Sobre Vaulta:** cambiar el *set* no es un find-replace del import —
+`MaterialIcons` y `MaterialCommunityIcons` son librerías de iconos
+distintas con nombres distintos (`search`→`magnify`, `favorite`→`heart`,
+`photo-album`→`image-multiple-outline`, etc.). Se remapearon los ~60
+nombres usados en los 25 archivos que importaban `MaterialIcons`,
+verificando cada uno contra el glyphmap real instalado de
+`MaterialCommunityIcons` antes de aplicarlo — así no se cuela un nombre
+que no existe y renderiza en blanco. El color de marca de Vaulta
+(`#2BD4CE` teal / `#7B6BF5` morado) ya coincidía con los `hues`
+canónicos, así que ahí no hubo que tocar nada.
+
+### Tamaño de icono
+
+Mismo problema que el redondeado: sin una escala, cada pantalla mete un
+número de `size` a ojo (13, 16, 18, 20, 22...) y el resultado es iconos
+que se ven bien en una pantalla y "chiquitos" en la de al lado — es lo
+que se notó en VaultGaming (el icono 🔥 de ofertas quedó en `13`, casi
+un punto). Ahora `tokens.ts` exporta `iconSize`:
+
+```ts
+export const iconSize = {
+  sm: 18, // secundario / inline junto a texto pequeño (badges, chips)
+  md: 22, // default — tabs, headers, botones de acción, la mayoría de los casos
+  lg: 28, // avatares chicos, iconos destacados de una card
+  xl: 48, // empty states / hero
+} as const;
+```
+
+`md` es el default para casi todo. Ya aplicado en Varo (tabs, header,
+toggle de contraseña) y VaultGaming (header, delete, 🔥 ofertas). Vaulta
+no consume `tokens.ts` todavía (solo migró el set de iconos, no adoptó
+el resto de los tokens compartidos), así que sus tamaños quedaron como
+estaban — pendiente si se decide adoptar `iconSize` ahí también.
 
 ### Enlazar la fuente nativa (una vez por app)
 

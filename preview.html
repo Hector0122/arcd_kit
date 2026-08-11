@@ -392,6 +392,28 @@
     color: var(--ink-soft);
   }
 
+  /* ---- icon size scale ---- */
+  .icon-size-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 28px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+  }
+  .icon-size-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  .icon-size-unit svg { color: var(--mark); display: block; }
+  .icon-size-unit .label {
+    font-family: "IBM Plex Mono", ui-monospace, monospace;
+    font-size: 10px;
+    color: var(--ink-faint);
+    text-align: center;
+  }
+
   /* ---- buttons ---- */
   .button-compare {
     display: flex;
@@ -685,8 +707,11 @@
   <section class="fig" id="icons">
     <div class="fig-label">Fig. 06 — Iconos</div>
     <h2>Emoji sin teñir → MaterialCommunityIcons</h2>
-    <p class="fig-note">Auditoría: Varo, Veya y VaultGaming usaban emoji sueltos como iconos de tab/header — un emoji es un glifo a color fijo del sistema, no obedece <code>color</code>, así que el "tab activo" probablemente no se pintaba del color de marca. Vaulta y Vellum ya usaban una librería vectorial, pero cada una con un set distinto. Estos son los iconos reales que ya migré en Varo — el mismo SVG que renderiza <code>react-native-vector-icons/MaterialCommunityIcons</code>, con <code>fill="currentColor"</code> para que sí se tiña.</p>
+    <p class="fig-note">Auditoría: Varo, Veya y VaultGaming usaban emoji sueltos como iconos de tab/header — un emoji es un glifo a color fijo del sistema, no obedece <code>color</code>, así que el "tab activo" probablemente no se pintaba del color de marca. Vaulta y Vellum ya usaban una librería vectorial, pero cada una con un set distinto (Vaulta usaba <code>MaterialIcons</code>, con nombres de icono incompatibles con el resto — se remapearon los ~60 usados en la app). Estos son los iconos reales que ya migré en Varo — el mismo SVG que renderiza <code>react-native-vector-icons/MaterialCommunityIcons</code>, con <code>fill="currentColor"</code> para que sí se tiña.</p>
     <div class="icon-compare" id="iconCompare"></div>
+
+    <p class="fig-note" style="margin-top:26px">Sin una escala de tamaño pasaba lo mismo que con los radios: cada pantalla metía un <code>size</code> a ojo. El de "🔥 ofertas" en VaultGaming quedó en <code>13</code> — casi un punto. Ahora <code>iconSize</code> define 4 pasos, <code>md</code> por default:</p>
+    <div class="icon-size-row" id="iconSizeRow"></div>
   </section>
 
   <!-- FIG 07 — BRAND PALETTES -->
@@ -817,6 +842,18 @@
       '</div>' +
       '<div class="icon-name">' + ic.name + '</div>';
     iconCompare.appendChild(unit);
+  });
+
+  var iconSizes = [['sm', 18], ['md', 22], ['lg', 28], ['xl', 48]];
+  var starPath = 'M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.63L12,2L9.19,8.63L2,9.24L7.45,13.97L5.82,21L12,17.27Z';
+  var iconSizeRow = document.getElementById('iconSizeRow');
+  iconSizes.forEach(function (s) {
+    var unit = document.createElement('div');
+    unit.className = 'icon-size-unit';
+    unit.innerHTML =
+      '<svg width="' + s[1] + '" height="' + s[1] + '" viewBox="0 0 24 24" fill="currentColor"><path d="' + starPath + '"/></svg>' +
+      '<span class="label">' + s[0] + ' · ' + s[1] + '</span>';
+    iconSizeRow.appendChild(unit);
   });
 
   var hues = [
