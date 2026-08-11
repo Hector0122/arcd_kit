@@ -58,8 +58,8 @@ apps**, ninguna decidida a propósito.
 |---|---|---|
 | Varo | emoji sueltos (`💰` `📈` `📉`) | ✅ migrado a MaterialCommunityIcons |
 | VaultGaming | emoji sueltos (`🔍` `🎮` `🏷️` `📥` `👤`) | ✅ migrado a MaterialCommunityIcons |
-| Veya | emoji sueltos (`🏠` `🔍` `📚` `👤`) | pendiente |
-| Vaulta | `react-native-vector-icons/MaterialIcons` | pendiente (cambiar de set) |
+| Veya | emoji sueltos (`🏠` `🔍` `📚` `👤`) | ✅ migrado a MaterialCommunityIcons |
+| Vaulta | `react-native-vector-icons/MaterialIcons` | ✅ migrado a MaterialCommunityIcons |
 | Vellum | `react-native-vector-icons/MaterialCommunityIcons` | ya correcto |
 
 Dos problemas reales, no solo estético:
@@ -84,10 +84,8 @@ que el highlight de estado activo por fin funciona de verdad.
 
 Migración por app:
 - **Vellum** — ya usa el set correcto, no requiere cambio.
-- **Varo** ✅, **VaultGaming** ✅ y **Vaulta** ✅ — migrados.
-- **Veya** — pendiente: instalar `react-native-vector-icons` +
-  `@types/react-native-vector-icons`, enlazar las fuentes nativas (ver
-  abajo) y reemplazar cada emoji por su icono MDI equivalente.
+- **Varo** ✅, **VaultGaming** ✅, **Vaulta** ✅ y **Veya** ✅ — migrados.
+  Las 6 apps ya usan `MaterialCommunityIcons`.
 
 **Sobre Vaulta:** cambiar el *set* no es un find-replace del import —
 `MaterialIcons` y `MaterialCommunityIcons` son librerías de iconos
@@ -252,8 +250,8 @@ de VaultGaming = danger), `hues` referencia directamente ese valor de
 
 | App | Dominio | Primary | Accent | Estado |
 |---|---|---|---|---|
-| Vaulta | fotos privadas | `#2BD4CE` teal | `#7B6BF5` morado | sin cambios |
-| Veya | pelis/series/anime | `#7B6BF5` morado | `#2BD4CE` teal | **antes tenía su propio morado/teal ligeramente distintos — ahora es literalmente el mismo dúo que Vaulta, en espejo** |
+| Vaulta ✅ | fotos privadas | `#2BD4CE` teal | `#7B6BF5` morado | sin cambios (ya coincidía con los `hues` canónicos) |
+| Veya ✅ | pelis/series/anime | `#7B6BF5` morado | `#2BD4CE` teal | **antes tenía su propio morado/teal ligeramente distintos (`#7C5CFF`/`#21D4B4`) — ahora es literalmente el mismo dúo que Vaulta, en espejo. Migrado.** |
 | Vellum | lector con streaks | `#4A7DB8` azul apagado | `#F5A623` ámbar | accent antes era un dorado propio (`#D9A441`) → ahora el ámbar único del sistema |
 | Velody | descarga de música | `#F97316` naranja | `#F5A623` ámbar | accent antes era su propio ámbar (`#EAB308`) → unificado |
 | **VaultGaming** ✅ | backlog/deals de juegos | `#E5484D` rojo | `#F5A623` ámbar | primary **nuevo** — antes gris/verde default de Tailwind; ahora es literalmente `semantic.danger`, mismo caso que el verde de Varo. Migrado (tokens + iconos + botones + 5 colores de estado unificados entre `StatusBadge`/`StatusSelectorModal`/`LibraryScreen`, que antes no coincidían entre sí) |
@@ -284,9 +282,9 @@ que revisarlo.
 4. Vincula las fuentes (ver sección arriba) y aplica `type.display` /
    `fontFamily.mono` donde antes había texto plano en headers/labels.
 5. Repite para el resto — recomendado en este orden: **Varo ✅ →
-   VaultGaming ✅** (las que no tenían marca, mayor impacto) → Vaulta →
-   Veya → Vellum → Velody (ya tienen buena identidad, solo ganan
-   estructura + tipografía + motion). VaultGaming no tenía `ThemeContext`
+   VaultGaming ✅ → Vaulta ✅ → Veya ✅** → Vellum → Velody (ya tienen
+   buena identidad, solo ganan estructura + tipografía + motion).
+   VaultGaming no tenía `ThemeContext`
    (era dark-only con hex sueltos en 9 archivos) — ahí `theme/colors.ts`
    exporta `colors` estático en vez de un hook, no hace falta el patrón
    `useTheme()` de Varo si tu app tampoco tiene modo claro/oscuro.
