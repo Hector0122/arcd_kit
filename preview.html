@@ -732,8 +732,10 @@
       <li class="done"><span class="n">02 ✓</span><div><b>VaultGaming</b><span class="why">Usaba grises + verde de Tailwind sin decisión de diseño — el otro caso urgente. Migrado.</span></div></li>
       <li class="done"><span class="n">03 ✓</span><div><b>Vaulta</b><span class="why">Color de marca ya coincidía — solo hubo que migrar el set de iconos (MaterialIcons → MaterialCommunityIcons, ~60 nombres remapeados). Migrado.</span></div></li>
       <li class="done"><span class="n">04 ✓</span><div><b>Veya</b><span class="why">Morado/teal propios muy cercanos a los canónicos — unificados, en espejo con Vaulta. Iconos emoji migrados a MaterialCommunityIcons. Migrado.</span></div></li>
-      <li><span class="n">05</span><div><b>Vellum, Velody</b><span class="why">Ya tienen identidad propia — solo ganan estructura, tipografía y motion compartidos.</span></div></li>
-      <li><span class="n">06</span><div><b>Portfolio</b><span class="why">Actualizar las tarjetas de proyecto si algún acento cambia.</span></div></li>
+      <li class="done"><span class="n">05 ✓</span><div><b>Vellum</b><span class="why">Dorado propio (accent/warning) → ámbar único del sistema. Migrado.</span></div></li>
+      <li class="done"><span class="n">06 ✓</span><div><b>Velody</b><span class="why">Tenía documentado naranja/ámbar sin auditar — el color real (degradado azul/morado) se formalizó como token en vez de repintar la app. Migrado.</span></div></li>
+      <li><span class="n">07</span><div><b>Portfolio</b><span class="why">Actualizar las tarjetas de proyecto si algún acento cambia.</span></div></li>
+      <li><span class="n">08</span><div><b>Todas</b><span class="why">Vincular las fuentes compartidas (Archivo Black + IBM Plex Mono) y aplicar el token de motion — hoy solo está adoptado el color/iconos/radios en la mayoría.</span></div></li>
     </ul>
   </section>
 
@@ -818,7 +820,7 @@
     { name: "Vaulta", domain: "Fotos privadas", primary: "#2BD4CE", accent: "#7B6BF5", dark: true, badge: "" },
     { name: "Vellum", domain: "Lector con streaks", primary: "#4A7DB8", accent: "#F5A623", dark: false, badge: "AJUSTADO" },
     { name: "Veya", domain: "Pelis, series, anime", primary: "#7B6BF5", accent: "#2BD4CE", dark: true, badge: "AJUSTADO" },
-    { name: "Velody", domain: "Descarga de música", primary: "#F97316", accent: "#F5A623", dark: true, badge: "AJUSTADO" }
+    { name: "Velody", domain: "Separación de stems (Electron)", primary: "#3B82F6", accent: "#7B6BF5", dark: true, badge: "CORREGIDO" }
   ];
   var icons = [
     { before: "🏠", name: "home-variant", where: "Varo · tab Inicio", path: "M12,3L20,9V21H15V14H9V21H4V9L12,3Z" },
@@ -860,8 +862,8 @@
 
   var hues = [
     ["green", "#2FBF71"], ["azure", "#4C8DFF"], ["slate blue", "#4A7DB8"],
-    ["teal", "#2BD4CE"], ["purple", "#7B6BF5"], ["amber", "#F5A623"],
-    ["red", "#E5484D"], ["orange", "#F97316"]
+    ["blue", "#3B82F6"], ["teal", "#2BD4CE"], ["purple", "#7B6BF5"],
+    ["amber", "#F5A623"], ["red", "#E5484D"], ["orange", "#F97316"]
   ];
   var hueStrip = document.getElementById("hueStrip");
   hues.forEach(function (h) {

@@ -253,7 +253,7 @@ de VaultGaming = danger), `hues` referencia directamente ese valor de
 | Vaulta ✅ | fotos privadas | `#2BD4CE` teal | `#7B6BF5` morado | sin cambios (ya coincidía con los `hues` canónicos) |
 | Veya ✅ | pelis/series/anime | `#7B6BF5` morado | `#2BD4CE` teal | **antes tenía su propio morado/teal ligeramente distintos (`#7C5CFF`/`#21D4B4`) — ahora es literalmente el mismo dúo que Vaulta, en espejo. Migrado.** |
 | Vellum | lector con streaks | `#4A7DB8` azul apagado | `#F5A623` ámbar | accent antes era un dorado propio (`#D9A441`) → ahora el ámbar único del sistema |
-| Velody | descarga de música | `#F97316` naranja | `#F5A623` ámbar | accent antes era su propio ámbar (`#EAB308`) → unificado |
+| Velody ✅ | separación de stems / música | `#3B82F6` azul | `#7B6BF5` morado | **corregido 2026-08-11: aquí tenía documentado naranja/ámbar sin haber auditado el código real** — el color de marca real (título, ~15 CTAs) siempre fue un degradado azul→morado (Tailwind sin curar). Se formalizó ese azul/morado como `hues.blue`/`hues.purple` en vez de forzar el naranja documentado. El naranja sigue existiendo en la app como acento secundario propio (loop markers, toggles), no como color de marca |
 | **VaultGaming** ✅ | backlog/deals de juegos | `#E5484D` rojo | `#F5A623` ámbar | primary **nuevo** — antes gris/verde default de Tailwind; ahora es literalmente `semantic.danger`, mismo caso que el verde de Varo. Migrado (tokens + iconos + botones + 5 colores de estado unificados entre `StatusBadge`/`StatusSelectorModal`/`LibraryScreen`, que antes no coincidían entre sí) |
 | **Varo** ✅ | metas de ahorro | `#2FBF71` verde | `#4C8DFF` azul | primary **nuevo** — literalmente `semantic.success`, antes no había marca propia. Migrado (tokens + iconos + botones) |
 
@@ -281,9 +281,14 @@ que revisarlo.
    `primary`/`accent`.
 4. Vincula las fuentes (ver sección arriba) y aplica `type.display` /
    `fontFamily.mono` donde antes había texto plano en headers/labels.
-5. Repite para el resto — recomendado en este orden: **Varo ✅ →
-   VaultGaming ✅ → Vaulta ✅ → Veya ✅** → Vellum → Velody (ya tienen
-   buena identidad, solo ganan estructura + tipografía + motion).
+5. Repite para el resto — orden recomendado, **las 6 apps ya migradas**:
+   **Varo ✅ → VaultGaming ✅ → Vaulta ✅ → Veya ✅ → Vellum ✅ → Velody ✅**.
+   Vellum y Velody ya tenían buena identidad propia — solo hubo que
+   unificar un color casi-duplicado en cada una (el dorado propio de
+   Vellum → ámbar único; el naranja/ámbar mal documentado de Velody →
+   el azul/morado que en realidad ya usaba). Velody es Electron/React/
+   Tailwind, no React Native — el color se formalizó como `@theme` de
+   Tailwind v4 en vez de `StyleSheet`, mismo hex, mecanismo distinto.
    VaultGaming no tenía `ThemeContext`
    (era dark-only con hex sueltos en 9 archivos) — ahí `theme/colors.ts`
    exporta `colors` estático en vez de un hook, no hace falta el patrón
