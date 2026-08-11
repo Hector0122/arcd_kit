@@ -174,8 +174,50 @@ export const type = {
 // ---------------------------------------------------------------------------
 export type BrandAccent = { primary: string; accent: string };
 
+// rgba(hex, alpha) — para fondos "soft" de badges/highlights sin depender
+// de que cada app lo reinvente (Vellum ya tenía su propio accentSoft suelto).
+function hexToRgba(hex: string, alpha: number): string {
+  const h = hex.replace('#', '');
+  const full = h.length === 3 ? h.split('').map((c) => c + c).join('') : h;
+  const int = parseInt(full, 16);
+  /* eslint-disable no-bitwise -- plain RGB channel extraction from a hex int */
+  const r = (int >> 16) & 255;
+  const g = (int >> 8) & 255;
+  const b = int & 255;
+  /* eslint-enable no-bitwise */
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+// Tipo explícito para que TypeScript compare `light`/`dark` estructuralmente
+// como `string`, no como los tipos-literal que arrastra `neutrals` (que es
+// `as const`) — sin esto, asignar el objeto "equivocado" (claro en vez de
+// oscuro) no marcaba error de tipos donde debería.
+export type AppThemeColors = {
+  background: string;
+  surface: string;
+  surfaceAlt: string;
+  border: string;
+  borderLight: string;
+  text: string;
+  textSecondary: string;
+  textTertiary: string;
+  textMuted: string;
+  primary: string;
+  primarySoft: string;
+  accent: string;
+  accentSoft: string;
+  success: string;
+  danger: string;
+  warning: string;
+  info: string;
+  overlay: string;
+  inputBg: string;
+  cardBg: string;
+  skeleton: string;
+};
+
 export function createAppTheme(brand: BrandAccent) {
-  const light = {
+  const light: AppThemeColors = {
     background: neutrals[0],
     surface: neutrals[50],
     surfaceAlt: neutrals[100],
@@ -186,7 +228,9 @@ export function createAppTheme(brand: BrandAccent) {
     textTertiary: neutrals[500],
     textMuted: neutrals[400],
     primary: brand.primary,
+    primarySoft: hexToRgba(brand.primary, 0.12),
     accent: brand.accent,
+    accentSoft: hexToRgba(brand.accent, 0.12),
     success: semantic.success.light,
     danger: semantic.danger.light,
     warning: semantic.warning.light,
@@ -197,7 +241,7 @@ export function createAppTheme(brand: BrandAccent) {
     skeleton: neutrals[200],
   };
 
-  const dark = {
+  const dark: AppThemeColors = {
     background: neutrals[950],
     surface: neutrals[900],
     surfaceAlt: neutrals[850],
@@ -208,7 +252,9 @@ export function createAppTheme(brand: BrandAccent) {
     textTertiary: neutrals[500],
     textMuted: neutrals[600],
     primary: brand.primary,
+    primarySoft: hexToRgba(brand.primary, 0.22),
     accent: brand.accent,
+    accentSoft: hexToRgba(brand.accent, 0.22),
     success: semantic.success.dark,
     danger: semantic.danger.dark,
     warning: semantic.warning.dark,
