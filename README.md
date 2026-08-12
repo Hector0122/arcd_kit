@@ -1,4 +1,4 @@
-# brand-kit
+# arcd_kit
 
 > Abre `preview.html` directo en el navegador (sin servidor, sin build) para ver la guía visual: neutros, tipografía, motion y la paleta de cada app.
 
@@ -452,6 +452,6 @@ solo se está validando en Android.
 ## Siguiente paso opcional
 
 Si esto prueba valer la pena después de migrar 2-3 apps, se puede
-convertir en un workspace real (pnpm) con `@hector/brand-kit` como
+convertir en un workspace real (pnpm) con `@hector/arcd_kit` como
 dependencia instalable en vez de copiar archivos — evita que los tokens
 se desincronicen entre repos.
