@@ -1,7 +1,10 @@
 import React from 'react';
 import { ActivityIndicator, Pressable, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { useTheme } from './theme/ThemeContext'; // ajusta el import a donde viva tu ThemeContext
-import { radius } from './tokens';
+import { radius, motion } from './tokens';
+
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 type ButtonVariant = 'primary' | 'danger' | 'ghost';
 
@@ -27,24 +30,38 @@ interface Props {
  * Apple: esquina "continua" (superelipse, no arco circular) + radio ligero.
  * Mismo radio en las 6 apps — es lo que las hace sentir de la misma familia
  * aunque cada una tenga su propio `primary`.
+ *
+ * El feedback de press es un scale con `motion.spring.press` (Reanimated) —
+ * mismo spring en las 6 apps, ver `## Motion` en el README.
  */
 export default function Button({ title, onPress, disabled, loading, variant = 'primary', style }: Props) {
   const { colors } = useTheme();
+  const scale = useSharedValue(1);
 
   const background =
     variant === 'primary' ? colors.primary : variant === 'danger' ? colors.danger : 'transparent';
   const textColor = variant === 'ghost' ? colors.textSecondary : '#FFFFFF';
   const isDisabled = disabled || loading;
 
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
   return (
-    <Pressable
+    <AnimatedPressable
       onPress={onPress}
       disabled={isDisabled}
-      style={({ pressed }) => [
+      onPressIn={() => {
+        scale.value = withSpring(0.96, motion.spring.press);
+      }}
+      onPressOut={() => {
+        scale.value = withSpring(1, motion.spring.press);
+      }}
+      style={[
         styles.base,
         { backgroundColor: background },
         isDisabled && styles.disabled,
-        pressed && !isDisabled && styles.pressed,
+        animatedStyle,
         style,
       ]}
     >
@@ -53,7 +70,7 @@ export default function Button({ title, onPress, disabled, loading, variant = 'p
       ) : (
         <Text style={[styles.text, { color: textColor }]}>{title}</Text>
       )}
-    </Pressable>
+    </AnimatedPressable>
   );
 }
 
@@ -69,9 +86,6 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
     fontWeight: '600',
-  },
-  pressed: {
-    opacity: 0.85,
   },
   disabled: {
     opacity: 0.5,
