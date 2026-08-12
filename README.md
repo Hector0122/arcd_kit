@@ -49,6 +49,28 @@ Esto extiende el mismo patrón que ya usas en el portfolio web
 (Archivo Black + IBM Plex Mono + sans del sistema para el body), así que
 portfolio y apps de producto van a sentirse de la misma marca.
 
+**Estado (aplicado 2026-08-11, las 6 apps):** antes las fuentes estaban
+enlazadas nativamente en Varo pero no se usaban en ningún componente
+real — quedaban linkeadas y ya. Ahora sí están aplicadas, con moderación:
+
+| App | Dónde | Mecanismo |
+|---|---|---|
+| Varo | wordmark "Varo" (Login), labels/cifras de `SummaryCard`, headers de navegación | RN nativo (`react-native.config.js` + assets) |
+| VaultGaming | wordmark "GameVault" (Login), headers de navegación | RN nativo |
+| Vaulta | 5 cifras de estadísticas en Profile (no hay wordmark de texto — el logo es un SVG, `VaultaLogo`, no aplica) | RN nativo |
+| Veya | wordmark "VEYA" (Login), labels de la tab bar | RN nativo |
+| Vellum | wordmark "Vellum" (SignIn y SignUp) — se dejó ahí nomás por ahora; es la app más sensible a cambios tipográficos por su estética de "papel" | RN nativo |
+| Velody | wordmark "Velody" (título con gradiente), 5 usos de `font-mono` genérico → `font-mono-brand` (BPM, timestamps, tiempo de grabación) | CSS `@font-face` + Tailwind v4 `@theme` (Electron, no aplica linking nativo) |
+
+**iOS pendiente:** en las 5 apps React Native, Android quedó resuelto
+directo (los `.ttf` se copiaron a `android/app/src/main/assets/fonts/`,
+donde Android los resuelve solo). iOS necesita un paso más — el
+`Info.plist` ya tiene la entrada `UIAppFonts`, pero eso solo no alcanza:
+hace falta correr `npx react-native-asset` (agrega los archivos al
+proyecto de Xcode) o arrastrarlos a mano en Xcode → target → *Copy Bundle
+Resources*. Sin eso, en iOS specifically el texto va a caer al fallback
+del sistema aunque el resto del código ya esté listo.
+
 ## Iconos
 
 Estado actual (auditado 2026-08-11): **3 fuentes distintas de icono en 5
@@ -280,7 +302,9 @@ que revisarlo.
    "color de marca" (botón principal, header, tab activo) pasan a
    `primary`/`accent`.
 4. Vincula las fuentes (ver sección arriba) y aplica `type.display` /
-   `fontFamily.mono` donde antes había texto plano en headers/labels.
+   `fontFamily.mono` donde antes había texto plano en headers/labels —
+   ✅ hecho en las 6 apps (ver tabla en `## Tipografía`), pendiente el
+   paso de iOS (`npx react-native-asset`) en las 5 apps RN.
 5. Repite para el resto — orden recomendado, **las 6 apps ya migradas**:
    **Varo ✅ → VaultGaming ✅ → Vaulta ✅ → Veya ✅ → Vellum ✅ → Velody ✅**.
    Vellum y Velody ya tenían buena identidad propia — solo hubo que
@@ -293,6 +317,26 @@ que revisarlo.
    (era dark-only con hex sueltos en 9 archivos) — ahí `theme/colors.ts`
    exporta `colors` estático en vez de un hook, no hace falta el patrón
    `useTheme()` de Varo si tu app tampoco tiene modo claro/oscuro.
+
+## Pendientes (para retomar)
+
+Lo que queda del plan original, en el orden en que se iría atacando:
+
+1. **Motion** — `motion.duration`/`easing`/`spring` existen en
+   `tokens.ts` pero ninguna app los usa todavía. Falta conectarlos a
+   transiciones reales con Reanimated (o el equivalente CSS en Velody).
+2. **iOS: terminar el linking de fuentes** en las 5 apps React Native —
+   correr `npx react-native-asset` (o agregar los `.ttf` a mano en Xcode,
+   *Copy Bundle Resources*) en cada una. Android ya está resuelto.
+3. **Los ~18 archivos de Varo con emoji sin revisar** (selector de
+   categorías y similares) — separar iconos reales (migrar a
+   MaterialCommunityIcons) de contenido elegido por el usuario (dejar
+   igual).
+4. **Portfolio web** — actualizar las tarjetas de proyecto si algún
+   acento cambió desde la última vez que se tocó.
+5. **Radios/spacing en Vaulta, Veya, Vellum, Velody** — solo Varo y
+   VaultGaming recibieron el barrido completo de `radius`/`iconSize`; el
+   resto se quedó con lo que ya tenían (no era el foco de esa sesión).
 
 ## Siguiente paso opcional
 
