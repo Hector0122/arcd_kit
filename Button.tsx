@@ -24,7 +24,7 @@ interface Props {
 
 /**
  * Botón estándar — el único que debería usarse en vez del `Button` nativo de
- * react-native. Ver brand-kit/README.md#botones.
+ * react-native. Ver arcd_kit/README.md#botones.
  *
  * Radio y curva de esquina tomados de referencia del estilo de controles de
  * Apple: esquina "continua" (superelipse, no arco circular) + radio ligero.
